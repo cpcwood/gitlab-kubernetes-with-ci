@@ -6,13 +6,8 @@ source ./terraform/infrastructure.env
 
 cd ./terraform/infrastructure
 
-terraform fmt -recursive
-
 echo "Applying infrastructure"
 
-terraform init
-
-terraform apply \
-  -var "aws_profile=$AWS_PROFILE"
+terraform apply
 
 echo "Complete"

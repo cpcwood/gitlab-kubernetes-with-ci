@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+set -euo pipefail
+IFS=$'\n\t'
+
+source ./terraform/infrastructure.env
+
+cd ./terraform/remote_state
+
+terraform fmt -recursive
+terraform init
+terraform apply
+
+remote_state_bucket_region="$(terraform output remote_state_s3_bucket_region | tr -d '"' )"
+remote_state_bucket="$(terraform output remote_state_s3_bucket | tr -d '"' )"
+remote_state_lock_table="$(terraform output remote_state_lock_table | tr -d '"' )"
+remote_state_key="$AWS_PROFILE.tfstate"
+
+cd -
+cd ./terraform/infrastructure
+
+terraform fmt -recursive
+terraform init \
+  -backend-config "region=$remote_state_bucket_region" \
+  -backend-config "bucket=$remote_state_bucket" \
+  -backend-config "dynamodb_table=$remote_state_lock_table" \
+  -backend-config "profile=$AWS_PROFILE" \
+  -backend-config "key=$remote_state_key"

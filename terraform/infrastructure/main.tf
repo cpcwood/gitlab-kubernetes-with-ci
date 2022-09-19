@@ -10,6 +10,13 @@ terraform {
       version = "~> 4.31"
     }
   }
+
+  backend "s3" {}
+}
+
+provider "aws" {
+  region  = var.application_aws_region
+  profile = var.aws_profile
 }
 
 provider "helm" {
@@ -21,9 +28,3 @@ provider "helm" {
     manifest = true
   }
 }
-
-provider "aws" {
-  region  = var.application_aws_region
-  profile = var.aws_profile
-}
-

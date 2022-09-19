@@ -2,7 +2,7 @@ data "template_file" "helm_values_gitlab" {
   template = file("./templates/gitlab-values.yaml.tpl")
 
   vars = {
-    DOMAIN      = var.gitlab_domain
+    DOMAIN = var.gitlab_domain
   }
 }
 
@@ -17,6 +17,7 @@ resource "helm_release" "gitlab" {
 resource "helm_release" "k3s_ingress_gitlab" {
   name  = "k3s-ingress-gitlab"
   chart = "./charts/k3s-ingress-gitlab"
+  timeout = 900
 
   values = [
     file("./charts/k3s-ingress-gitlab/values.yaml")

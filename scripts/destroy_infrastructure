@@ -6,9 +6,9 @@ source ./terraform/infrastructure.env
 
 cd ./terraform/infrastructure
 
-echo "Destorying application infrastructure..."
+terraform destroy
 
-terraform destroy \
-  -var "aws_profile=$AWS_PROFILE"
+cd -
+cd ./terraform/remote_state
 
-echo "Complete"
+terraform destroy

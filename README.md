@@ -49,7 +49,7 @@ Clone the project to your local machine and navigate to the project root directo
 Create the infrastructure:
 
 ```sh
-./scripts/apply_application
+./scripts/build_infrastructure
 ```
 
 ### Add Public SSH Key to GitLab User
