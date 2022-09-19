@@ -1,0 +1,4 @@
+apiVersion: v2
+description: Helm chart for GitLab K3s Ingress
+name: k3s-ingress-gitlab
+version: 1.0.0

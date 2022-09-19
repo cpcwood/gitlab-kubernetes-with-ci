@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+set -euo pipefail
+IFS=$'\n\t'
+
+source ./terraform/infrastructure.env
+
+cd ./terraform/infrastructure
+
+terraform fmt -recursive
+
+echo "Applying infrastructure"
+
+terraform init
+
+terraform apply \
+  -var "aws_profile=$AWS_PROFILE"
+
+echo "Complete"
