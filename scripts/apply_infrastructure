@@ -2,7 +2,7 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-source ./terraform/infrastructure.env
+source ./infrastructure.env
 
 cd ./terraform/infrastructure
 

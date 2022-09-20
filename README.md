@@ -43,6 +43,11 @@ The GitLab chart variables can be found in [`terraform/infrastructure/templates/
 
 Clone the project to your local machine and navigate to the project root directory.
 
+### Create the Infrastructure Environment Variables
+
+Create `infrastructure.env` in the root directory from the [`infrastructure.env.example`](./infrastructure.env.template) template.
+
+Ignore the `TF_VAR_gitlab_runner_registration_token` variable for now, since it won't be available until after GitLab is deployed.
 
 ### Create the Infrastructure
 
@@ -79,3 +84,14 @@ Add your public SSH key to your user.
 
 ### Push Sample Repository
 
+TODO
+
+### Create GitLab Runner
+
+Get a runner registration token from the GitLab Runners admin page: `https://gitlab.example/admin/runners` by clicking the register runner button.
+
+Add the token to the `TF_VAR_gitlab_runner_registration_token` variable in your `infrastructure.env`.
+
+Re-deploy the application using `./scripts/apply_infrastructure`.
+
+Note: The runner registration token is private and should be kept in a Kubernetes secret in production deployments.
