@@ -10,13 +10,14 @@ resource "helm_release" "gitlab" {
   name       = "gitlab"
   repository = "https://charts.gitlab.io/"
   chart      = "gitlab"
+  version    = "6.3.3"
 
   values = [data.template_file.helm_values_gitlab.rendered]
 }
 
 resource "helm_release" "k3s_ingress_gitlab" {
-  name  = "k3s-ingress-gitlab"
-  chart = "./charts/k3s-ingress-gitlab"
+  name    = "k3s-ingress-gitlab"
+  chart   = "./charts/k3s-ingress-gitlab"
   timeout = 900
 
   values = [
