@@ -1,0 +1,44 @@
+# OS X
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.Spotlight-V100
+.Trashes
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Rails
+coverage/
+log/
+storage/
+tmp/
+.bundle
+.ruby-version
+*.key
+*.log
+*.state
+*.pid
+*.env
+
+# CI
+.gitlab-ci.yml
+
+# Dependencies
+node_modules
+
+# others
+.git
+.gitignore
+.keep
+.vscode
+.byebug_history
+.rubocop.yml
+logfile
+.github
+.kube
+tasks

@@ -1,0 +1,11 @@
+.shared:container:build:
+  stage: Container Build
+  image: gcr.io/kaniko-project/executor:v1.8.1-debug
+  variables:
+    CONTAINER_REGISTRY_USER: "cpcwood"
+  script:
+    - /kaniko/executor
+        --context "$CI_PROJECT_DIR"
+        --dockerfile "$CI_PROJECT_DIR/Dockerfile"
+        --destination "$CONTAINER_REGISTRY_USER/$CI_PROJECT_NAME:$CI_COMMIT_REF_NAME"
+  dependencies: []

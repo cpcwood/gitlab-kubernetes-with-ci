@@ -1,0 +1,10 @@
+#!/bin/bash
+
+if ! bundle check >/dev/null ; then
+  bundle install
+fi
+
+kill -INT "$(cat ./tmp/pids/server.pid 2>/dev/null)" >/dev/null 2>&1
+rm -f ./tmp/pids/server.pid >/dev/null 2>&1
+
+bundle exec rails server -b 0.0.0.0 -p "$PORT"

@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  app:
+    stdin_open: true
+    tty: true
+    build: 
+      context: ../..
+      dockerfile: .docker/dockerfiles/dev.Dockerfile
+    container_name: sample-project
+    environment:
+      RAILS_ENV: development
+      RUBYOPT: -W0
+    user: "${FIXUID:-1000}:${FIXGID:-1000}"
+    volumes:
+      - ../..:/opt/app/
+      - sample-project-gems:/gems
+    ports:
+      - 5000:5000
+
+volumes:
+  sample-project-gems:

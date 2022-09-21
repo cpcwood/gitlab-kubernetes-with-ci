@@ -1,0 +1,102 @@
+stages:
+  - Check cache
+  - Build Dependencies
+  - Test
+  - Container Build and Push
+  - Pipeline Complete
+
+variables:
+  RAILS_ENV: development
+  BUNDLE_PATH: vendor
+
+default:
+  image: ruby::3.1.2-slim
+
+check-cache:
+  stage: Check cache
+  interruptible: true
+  cache:
+    - key: cache 
+      paths:
+        - cache
+  script:
+    - echo "Starting test build"
+    - echo "What's in the cache folder?"
+    - mkdir cache || true
+    - ls -al cache/
+    - |
+      if [[ -f "cache/test-file" ]]; then
+        echo "cache/test-file exists."
+        cat cache/test-file
+      else
+        echo "creating cache/test-file"
+        echo 'I will be cached text' > cache/test-file
+        if [[ -f "cache/test-file" ]]; then
+          echo "cache/test-file created."
+        else
+          echo "failed to create cache test file"
+          exit 1
+        fi
+      fi
+
+bundle:
+  stage: Build Dependencies
+  interruptible: true
+  script:
+    - bundle config set frozen 'true'
+    - bundle install
+  artifacts:
+    paths:
+      - vendor
+
+yarn:
+  stage: Build Dependencies
+  interruptible: true
+  script:
+    - apt-get update 
+    - apt-get install nodejs
+    - yarn install --frozen-lockfile
+  artifacts:
+    paths:
+      - node_modules
+
+rspec:
+  stage: Test
+  interruptible: true
+  script:
+    - bundle exec rspec
+  needs:
+    - bundler
+
+jest:
+  stage: Test
+  interruptible: true
+  parallel: 3
+  script:
+    - apt-get update 
+    - apt-get install nodejs
+    - yarn jest --shard “$CI_NODE_INDEX/$CI_NODE_TOTAL” --maxWorkers=1
+  needs:
+    - yarn
+
+rubocop:
+  stage: Test
+  interruptible: true
+  script:
+    - bundle exec rubocop
+  
+include:
+  - project: gitlab-instance/sample-project
+    ref: main
+    file: /shared-gitlab-ci.yml
+
+container:build:
+  stage: Container Build and Push
+  extends: .shared:container:build
+  only:
+    - master
+
+success:
+  stage: Pipeline Complete
+  script:
+    - echo 'whoop'
