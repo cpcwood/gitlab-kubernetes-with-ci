@@ -95,3 +95,9 @@ Add the token to the `TF_VAR_gitlab_runner_registration_token` variable in your 
 Re-deploy the application using `./scripts/apply_infrastructure`.
 
 Note: The runner registration token is private and should be kept in a Kubernetes secret in production deployments.
+
+---
+
+## Notes
+
+- This deployment of GitLab is for demonstration and is not intended to be production ready.

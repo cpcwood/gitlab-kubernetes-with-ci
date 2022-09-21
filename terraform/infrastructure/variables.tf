@@ -14,3 +14,13 @@ variable "gitlab_domain" {
 variable "gitlab_runner_registration_token" {
   description = "GitLab runner registration token from the admin console (leave blank if not available)"
 }
+
+variable "gitlab_runner_distributed_cache_bucket" {
+  description = "Name of AWS S3 bucket to create for gitlab runner distributed cache"
+}
+
+variable "distributed_cache_object_expiration_days" {
+  type        = number
+  default     = 90
+  description = "Number of days after which distributed cache objects are deleted"
+}
