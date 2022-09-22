@@ -2,15 +2,15 @@ version: "3.8"
 
 services:
   app:
-    stdin_open: true
     tty: true
+    stdin_open: true
     build: 
       context: ../..
       dockerfile: .docker/dockerfiles/dev.Dockerfile
     container_name: sample-project
     environment:
       RAILS_ENV: development
-      RUBYOPT: -W0
+    command: ./.docker/scripts/startup-app-dev
     user: "${FIXUID:-1000}:${FIXGID:-1000}"
     volumes:
       - ../..:/opt/app/

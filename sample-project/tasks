@@ -5,42 +5,43 @@ set -euo pipefail
 export FIXUID="$(id -u)" 
 export FIXGID="$(id -g)"
 
-COMPOSE_PROJECT_NAME=sample-project
+CONTAINER_REGISTRY_USER=cpcwood
+PROJECT_NAME=sample-project
 APP_SERVICE_NAME=app
 APP_HEALTHCHECK_URL=http://localhost:5000
 
 function build {
   docker compose \
-    -p $COMPOSE_PROJECT_NAME \
+    -p $PROJECT_NAME \
     -f ./.docker/docker-compose/dev.yml \
     build "$@"
 }
 
 function up {
   docker compose \
-    -p $COMPOSE_PROJECT_NAME \
+    -p $PROJECT_NAME \
     -f ./.docker/docker-compose/dev.yml \
     up "$@"
 }
 
 function down {
 	docker compose \
-    -p $COMPOSE_PROJECT_NAME \
+    -p $PROJECT_NAME \
     -f ./.docker/docker-compose/dev.yml \
     down "$@"
 }
 
 function run {
 	docker compose \
-		-p $COMPOSE_PROJECT_NAME \
+		-p $PROJECT_NAME \
 		-f ./.docker/docker-compose/dev.yml \
 		run $APP_SERVICE_NAME /bin/bash -c "source ./.docker/scripts/entrypoint-dev && $*"
 }
 
-function exec {
+function ex {
 	ensure_app_container_running
 	docker compose \
-		-p $COMPOSE_PROJECT_NAME \
+		-p $PROJECT_NAME \
 		-f ./.docker/docker-compose/dev.yml \
 		exec $APP_SERVICE_NAME /bin/bash -c "source ./.docker/scripts/entrypoint-dev && $*"
 }
@@ -48,42 +49,52 @@ function exec {
 function bash {
 	ensure_app_container_running
 	docker compose \
-		-p $COMPOSE_PROJECT_NAME \
+		-p $PROJECT_NAME \
 		-f ./.docker/docker-compose/dev.yml \
 		exec $APP_SERVICE_NAME /bin/bash --init-file ./.docker/scripts/entrypoint-dev
 }
 
 function rails {
-	exec bundle exec rails "$@"
+	ex bundle exec rails "$@"
 }
 
 function yarn {
-	exec yarn "$@"
+	ex yarn "$@"
 }
 
 function bundle {
-	exec bundle "$@"
+	ex bundle "$@"
 }
 
 function rubocop {
-	exec bundle exec rubocop "$@"
+	ex bundle exec rubocop "$@"
 }
 
 function rspec {
 	ensure_app_container_running
   docker compose \
-		-p $COMPOSE_PROJECT_NAME \
+		-p $PROJECT_NAME \
 		-f ./.docker/docker-compose/dev.yml \
 		exec -e RAILS_ENV=test $APP_SERVICE_NAME \
     /bin/bash -c "source ./.docker/scripts/entrypoint-dev && bundle exec rspec $*"
 }
 
 function ensure_app_container_running {
-	(! (docker ps | grep -q $COMPOSE_PROJECT_NAME)) && up -d
+	(! (docker ps | grep -q $PROJECT_NAME)) && up -d
   until curl --output /dev/null --silent --head "$APP_HEALTHCHECK_URL" ; do
     echo 'waiting for app...'
     sleep 2.5
   done
+}
+
+function build-prod {
+	GIT_SHA="$(git rev-parse HEAD | head -c8)"
+
+  docker build \
+    -f ./.docker/dockerfiles/Dockerfile \
+		-t "$CONTAINER_REGISTRY_USER/$PROJECT_NAME:latest" \
+		-t "$CONTAINER_REGISTRY_USER/$PROJECT_NAME:$GIT_SHA" \
+		.
 }
 
 if [[ ! $(type -t "$1") == function ]]; then

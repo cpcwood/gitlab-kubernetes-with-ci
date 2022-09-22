@@ -1,15 +1,22 @@
-FROM ruby::3.1.2-slim
+FROM ruby:3.1.2-slim
+
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get install -y bash curl tzdata build-essential \
+    software-properties-common npm && \
+    cp /usr/share/zoneinfo/Europe/London /etc/localtime && \
+    echo "Europe/London" > /etc/timezone
+
+RUN npm install npm@latest --global && \
+    npm install n yarn && \
+    n 16
 
 ENV RAILS_ENV=development \
   NODE_ENV=development \
   APP_HOME=/opt/app \
   PORT=5000
 
-RUN apt-get update && \
-    apt-get upgrade -y && \
-    apt-get install bash curl tzdata nodejs yarn && \
-    cp /usr/share/zoneinfo/Europe/London /etc/localtime && \
-    echo "Europe/London" > /etc/timezone
+WORKDIR $APP_HOME
 
 # Ensure gems are owned by docker user
 ARG BUNDLE_PATH=/gems
@@ -32,7 +39,8 @@ RUN USER=docker && \
 
 USER docker:docker
 
-WORKDIR $APP_HOME
-
 EXPOSE $PORT
+
 ENTRYPOINT ["./.docker/scripts/entrypoint-dev"]
+
+CMD ["./.docker/scripts/startup-app-dev"]

@@ -2,20 +2,18 @@
   "name": "sample-project",
   "license": "MIT",
   "dependencies": {
-    "@babel/polyfill": "^7.12.1",
-    "@babel/preset-env": "^7.13.8",
-    "@hotwired/stimulus": "^3.0.1",
-    "babel-eslint": "^10.1.0",
-    "babel-jest": "^28.1.0",
-    "babel-loader": "^8.2.2",
+    "@rails/webpacker": "5.4.3",
+    "stimulus": "^3.0.1",
+    "webpack": "^4.46.0",
+    "webpack-cli": "^3.3.12"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.19.1",
+    "@babel/preset-env": "^7.19.1",
+    "babel-jest": "^29.0.3",
     "jest": "^28.1.0",
     "jest-environment-jsdom": "^28.1.0",
-    "stimulus": "^3.0.1",
-    "url-loader": "^4.1.1",
-    "webpack": "^5.72.1",
-    "webpack-assets-manifest": "5.0.6",
-    "webpack-cli": "^4.9.2",
-    "yarn-check": "^0.0.3"
+    "webpack-dev-server": "^3"
   },
   "jest": {
     "testRegex": ".*_spec.js",
@@ -27,7 +25,7 @@
     ],
     "moduleDirectories": [
       "node_modules",
-      "<rootDir>/app/javascript"
+      "<rootDir>/app/javascript/packs"
     ],
     "transform": {
       "^.+\\.js$": "babel-jest"

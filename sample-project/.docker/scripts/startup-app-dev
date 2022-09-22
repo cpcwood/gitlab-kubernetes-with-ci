@@ -4,6 +4,8 @@ if ! bundle check >/dev/null ; then
   bundle install
 fi
 
+yarn install
+
 kill -INT "$(cat ./tmp/pids/server.pid 2>/dev/null)" >/dev/null 2>&1
 rm -f ./tmp/pids/server.pid >/dev/null 2>&1
 
