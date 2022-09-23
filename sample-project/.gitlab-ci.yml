@@ -6,12 +6,20 @@ stages:
   - Pipeline Complete
 
 variables:
-  RAILS_ENV: development
   NODE_ENV: test
+  RAILS_ENV: development
   BUNDLE_PATH: vendor
 
 default:
   image: ruby:3.1.2-slim
+
+.install-yarn:
+  before_script:
+    - apt-get update 
+    - apt-get install npm
+    - npm install npm@latest --global
+    - npm install n yarn --global && \
+    - n 16
 
 check-cache:
   stage: Check cache
@@ -53,9 +61,8 @@ bundle:
 yarn:
   stage: Build Dependencies
   interruptible: true
+  extends: .install-yarn
   script:
-    - apt-get update 
-    - apt-get install nodejs
     - yarn install --frozen-lockfile
   artifacts:
     paths:
@@ -72,10 +79,9 @@ rspec:
 jest:
   stage: Test
   interruptible: true
+  extends: .install-yarn
   parallel: 3
   script:
-    - apt-get update 
-    - apt-get install nodejs
     - yarn jest --shard “$CI_NODE_INDEX/$CI_NODE_TOTAL” --maxWorkers=1
   needs:
     - yarn
