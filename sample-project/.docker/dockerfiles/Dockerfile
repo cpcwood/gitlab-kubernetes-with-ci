@@ -8,7 +8,7 @@ RUN apt-get update && \
     echo "Europe/London" > /etc/timezone
 
 RUN npm install npm@latest --global && \
-    npm install n yarn && \
+    npm install n yarn --global && \
     n 16
 
 ENV RAILS_ENV=production \
@@ -30,6 +30,7 @@ ENV PATH="${APP_HOME}/bin:${PATH}"
 
 RUN ASSET_PRECOMPILE=1 \
     RAILS_ENV=production \
+    SECRET_KEY_BASE=production_build_key \
     bundle exec rails assets:precompile --trace 
 
 EXPOSE $PORT

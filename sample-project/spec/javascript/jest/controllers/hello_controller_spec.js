@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 
-import { Application } from 'stimulus'
+import { Application } from '@hotwired/stimulus'
 import helloController from 'controllers/hello_controller'
 
 describe('hello_controller', () => {

@@ -8,7 +8,7 @@ RUN apt-get update && \
     echo "Europe/London" > /etc/timezone
 
 RUN npm install npm@latest --global && \
-    npm install n yarn && \
+    npm install n yarn --global && \
     n 16
 
 ENV RAILS_ENV=development \
