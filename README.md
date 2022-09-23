@@ -1,6 +1,6 @@
 # GitLab Kubernetes with CI
 
-Scripts and infrastructure to setup example GitLab instance to demonstrate the CI improvements outlined in my blog post: <add here>
+Scripts and infrastructure to setup example GitLab instance to demonstrate the CI improvements outlined in my blog post: [How We Reduced Our GitLab CI Pipeline Duration by 70% at Student Beans](https://www.cpcwood.com/blog/6-how-we-reduced-our-gitlab-ci-pipeline-duration-by-70-at-student-beans).
 
 ## Setup
 
