@@ -132,7 +132,6 @@ DOCKER_AUTH="{ "auths": { "https://index.docker.io/v1/": { "auth": "<base64 enco
 
 Trigger a GitLab CI pipeline in the [sample repository](https://gitlab.gitlab.example/root/sample-project) on the `main` branch to test the runner configuration.
 
----
 
 ## Notes
 
