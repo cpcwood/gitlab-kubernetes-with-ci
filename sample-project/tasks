@@ -5,7 +5,7 @@ set -euo pipefail
 export FIXUID="$(id -u)" 
 export FIXGID="$(id -g)"
 
-CONTAINER_REGISTRY_USER=cpcwood
+CONTAINER_REGISTRY_USER=||CONTAINER_REGISTRY_USER||
 PROJECT_NAME=sample-project
 APP_SERVICE_NAME=app
 APP_HEALTHCHECK_URL=http://localhost:5000

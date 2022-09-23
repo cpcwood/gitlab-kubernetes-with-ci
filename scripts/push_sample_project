@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -euo pipefail
+IFS=$'\n\t'
+
+source ./.env
+
+cd ./sample-project
+
+find ./ -type f -print0 | xargs sed -i "s/||CONTAINER_REGISTRY_USER||/$CONTAINER_REGISTRY_USER/g"
+
+git init
+git add .
+git commit -m "Push sample project to GitLab"
+git remote add source "git@gitlab.$GITLAB_DOMAIN:root/sample-project.git" main
+git push -u -f source main

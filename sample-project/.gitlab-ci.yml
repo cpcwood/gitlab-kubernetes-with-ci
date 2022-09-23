@@ -3,6 +3,7 @@ stages:
   - Build Dependencies
   - Test
   - Container Build and Push
+  - Deploy
   - Pipeline Complete
 
 variables:
@@ -102,6 +103,11 @@ container:build:
   extends: .shared:container:build
   only:
     - master
+
+deploy:
+  stage: Deploy
+  script:
+    - echo 'some deployment command'
 
 success:
   stage: Pipeline Complete
