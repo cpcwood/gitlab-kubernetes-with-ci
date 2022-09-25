@@ -17,7 +17,7 @@ default:
 .install-yarn:
   before_script:
     - apt-get update 
-    - apt-get install npm build-essential
+    - apt-get install -y npm build-essential
     - npm install npm@latest --global
     - npm install n yarn --global && \
     - n 16
@@ -52,6 +52,9 @@ check-cache:
 bundle:
   stage: Build Dependencies
   interruptible: true
+  before_script:
+    - apt-get update 
+    - apt-get install -y build-essential
   script:
     - bundle config set frozen 'true'
     - bundle install
