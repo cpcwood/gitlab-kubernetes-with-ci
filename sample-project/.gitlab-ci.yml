@@ -17,7 +17,7 @@ default:
 .install-yarn:
   before_script:
     - apt-get update 
-    - apt-get install npm
+    - apt-get install npm build-essential
     - npm install npm@latest --global
     - npm install n yarn --global && \
     - n 16

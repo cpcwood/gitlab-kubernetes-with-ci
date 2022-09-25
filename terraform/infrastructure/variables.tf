@@ -11,6 +11,10 @@ variable "gitlab_domain" {
   description = "GitLab instance domain name"
 }
 
+variable "kubernetes_cluster_ip" {
+  description = "GitLab instance domain name"
+}
+
 variable "gitlab_runner_registration_token" {
   description = "GitLab runner registration token from the admin console (leave blank if not available)"
 }

@@ -1,10 +1,13 @@
-gitlabUrl: ${DOMAIN}
+gitlabUrl: ${GITLAB_SERVICE_URL}
 runnerRegistrationToken: ${REGISTRATION_TOKEN}
 rbac:
   create: true
 runners:
   config: |
     [[runners]]
+      pre_clone_script = "echo '${CLUSTER_IP} ${GITLAB_DOMAIN}' >> /etc/hosts"
+      environment = [ "GIT_SSL_NO_VERIFY=true" ]
+      
       [runners.kubernetes]
         image = "alpine:latest"
       
