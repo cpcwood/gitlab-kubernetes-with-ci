@@ -2,7 +2,7 @@
   stage: Container Build
   image: gcr.io/kaniko-project/executor:v1.8.1-debug
   variables:
-    CONTAINER_REGISTRY_USER: "||CONTAINER_REGISTRY_USER||"
+    CONTAINER_REGISTRY_USER: "__CONTAINER_REGISTRY_USER__"
   script:
     - mkdir -p /kaniko/.docker/
     - echo "$DOCKER_AUTH" > /kaniko/.docker/config.json

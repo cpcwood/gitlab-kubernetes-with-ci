@@ -75,7 +75,7 @@ rspec:
   script:
     - bundle exec rspec
   needs:
-    - bundler
+    - bundle
 
 jest:
   stage: Test
@@ -94,7 +94,7 @@ rubocop:
     - bundle exec rubocop
   
 include:
-  - project: gitlab-instance/sample-project
+  - project: root/sample-project
     ref: main
     file: /shared.gitlab-ci.yml
 

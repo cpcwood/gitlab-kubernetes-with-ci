@@ -33,9 +33,9 @@ The GitLab application in this repository is configured to deploy to a Kubernete
 
 The application will deploy to the `gitlab` namespace in the default cluster.
 
-The infrastructure is set up to work with a (my) local install of [k3s](https://k3s.io/), please adjust to match your cluster if required.
+The infrastructure is set up to work with a local install of [k3s](https://k3s.io/), please adjust to match your cluster if required.
 
-The GitLab chart variables can be found in [`terraform/infrastructure/templates/gitlab-values.yaml.tpl`](./terraform/infrastructure/templates/gitlab-values.yaml.tpl) with basic config in [`terraform/.env`](./terraform/.env).
+The GitLab helm chart variables can be found in [`terraform/infrastructure/templates/gitlab-values.yaml.tpl`](./terraform/infrastructure/templates/gitlab-values.yaml.tpl) with basic config in [`terraform/.env`](./terraform/.env).
 
 
 ### Clone Repository
