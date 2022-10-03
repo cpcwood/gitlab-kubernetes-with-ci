@@ -32,7 +32,6 @@ gitlab:
   metrics:
     enabled: false
 
-
 postgresql:
   persistence:
     storageClass: local-path

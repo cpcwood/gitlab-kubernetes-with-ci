@@ -27,30 +27,5 @@ describe('hello_controller', () => {
         expect(controllerElement.innerHTML).toContain("Hello World!")
       })
     })
-
-    // To test sharding
-    describe('#connect', () => {
-      it('text injected 2', () => {
-        expect(controllerElement.innerHTML).toContain("Hello World!")
-      })
-    })
-
-    describe('#connect', () => {
-      it('text injected 3', () => {
-        expect(controllerElement.innerHTML).toContain("Hello World!")
-      })
-    })
-
-    describe('#connect', () => {
-      it('text injected 4', () => {
-        expect(controllerElement.innerHTML).toContain("Hello World!")
-      })
-    })
-
-    describe('#connect', () => {
-      it('text injected 5', () => {
-        expect(controllerElement.innerHTML).toContain("Hello World!")
-      })
-    })
   })
 })

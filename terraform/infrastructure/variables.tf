@@ -19,6 +19,14 @@ variable "gitlab_runner_registration_token" {
   description = "GitLab runner registration token from the admin console (leave blank if not available)"
 }
 
+variable "container_registry_user" {
+  description = "Container registry user for prefixing the sample-project container images"
+}
+
+variable "container_registry_token" {
+  description = "Container registry access token"
+}
+
 variable "gitlab_runner_distributed_cache_bucket" {
   description = "Name of AWS S3 bucket to create for gitlab runner distributed cache"
 }

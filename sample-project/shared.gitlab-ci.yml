@@ -2,15 +2,14 @@
   stage: Container Build
   image: gcr.io/kaniko-project/executor:v1.8.1-debug
   variables:
-    CONTAINER_REGISTRY_USER: "__CONTAINER_REGISTRY_USER__"
+    DOCKERFILE_PATH: "Dockerfile"
   script:
     - mkdir -p /kaniko/.docker/
     - echo "$DOCKER_AUTH" > /kaniko/.docker/config.json
     - /kaniko/executor
         --context "$CI_PROJECT_DIR"
-        --dockerfile "$CI_PROJECT_DIR/Dockerfile"
+        --dockerfile "$CI_PROJECT_DIR/$DOCKERFILE_PATH"
         --cache=true
         --cache-repo "$CONTAINER_REGISTRY_USER/$CI_PROJECT_NAME-cache"
         --cache-ttl 168h
         --destination "$CONTAINER_REGISTRY_USER/$CI_PROJECT_NAME:$CI_COMMIT_REF_NAME"
-  dependencies: []

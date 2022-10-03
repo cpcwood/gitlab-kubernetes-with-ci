@@ -11,17 +11,6 @@ variables:
   RAILS_ENV: development
   BUNDLE_PATH: vendor
 
-default:
-  image: ruby:3.1.2-slim
-
-.install-yarn:
-  before_script:
-    - apt-get update 
-    - apt-get install -y npm build-essential
-    - npm install npm@latest --global
-    - npm install n yarn --global && \
-    - n 16
-
 check-cache:
   stage: Check cache
   interruptible: true
@@ -41,16 +30,12 @@ check-cache:
       else
         echo "creating cache/test-file"
         echo 'I will be cached text' > cache/test-file
-        if [[ -f "cache/test-file" ]]; then
-          echo "cache/test-file created."
-        else
-          echo "failed to create cache test file"
-          exit 1
-        fi
+        echo "cache/test-file created."
       fi
 
 bundle:
   stage: Build Dependencies
+  image: ruby:3.1.2-slim
   interruptible: true
   before_script:
     - apt-get update 
@@ -64,8 +49,8 @@ bundle:
 
 yarn:
   stage: Build Dependencies
+  image: node:16-slim
   interruptible: true
-  extends: .install-yarn
   script:
     - yarn install --frozen-lockfile
   artifacts:
@@ -74,6 +59,7 @@ yarn:
 
 rspec:
   stage: Test
+  image: ruby:3.1.2-slim
   interruptible: true
   script:
     - bundle exec rspec
@@ -82,20 +68,23 @@ rspec:
 
 jest:
   stage: Test
+  image: node:16-slim
   interruptible: true
-  extends: .install-yarn
   parallel: 3
   script:
-    - yarn jest --shard “$CI_NODE_INDEX/$CI_NODE_TOTAL” --maxWorkers=1
+    - yarn jest --shard "$CI_NODE_INDEX/$CI_NODE_TOTAL" --maxWorkers=1
   needs:
     - yarn
 
 rubocop:
   stage: Test
+  image: ruby:3.1.2-slim
   interruptible: true
   script:
     - bundle exec rubocop
-  
+  needs:
+    - bundle
+
 include:
   - project: root/sample-project
     ref: main
@@ -104,15 +93,24 @@ include:
 container:build:
   stage: Container Build and Push
   extends: .shared:container:build
+  variables:
+    DOCKERFILE_PATH: .docker/dockerfiles/Dockerfile
+  dependencies: []
   only:
-    - master
+    - main
 
 deploy:
   stage: Deploy
   script:
     - echo 'some deployment command'
+  needs:
+    - job: container:build
+      artifacts: false
+  only:
+    - main
 
 success:
   stage: Pipeline Complete
   script:
     - echo 'whoop'
+  dependencies: []

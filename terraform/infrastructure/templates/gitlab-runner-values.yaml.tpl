@@ -6,7 +6,11 @@ runners:
   config: |
     [[runners]]
       pre_clone_script = "echo '${CLUSTER_IP} ${GITLAB_DOMAIN}' >> /etc/hosts"
-      environment = [ "GIT_SSL_NO_VERIFY=true" ]
+      environment = [ 
+        'GIT_SSL_NO_VERIFY=true',
+        'CONTAINER_REGISTRY_USER=${CONTAINER_REGISTRY_USER}',
+        'DOCKER_AUTH={"auths":{"https://index.docker.io/v1/":{"auth":"${CONTAINER_REGISTRY_AUTH}"}}}'
+      ]
       
       [runners.kubernetes]
         image = "alpine:latest"

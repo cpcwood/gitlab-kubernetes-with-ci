@@ -29,7 +29,7 @@ aws_secret_access_key = <iam user secret key>
 
 ### Kubernetes Cluster
 
-The GitLab application in this repository is configured to deploy to a Kubernetes using helm. Please ensure you have a Kubernetes cluster created with at least 2 nodes and the configuration file located on your local machine at `~/.kube/config`. 
+The GitLab application in this repository is configured to deploy to a Kubernetes using [Helm](https://helm.sh/). Please ensure you have a Kubernetes cluster created with at least 2 nodes and the configuration file located on your local machine at `~/.kube/config`. 
 
 The application will deploy to the `gitlab` namespace in the default cluster.
 
@@ -83,9 +83,22 @@ Add your public SSH key to your GitHub user.
 
 ### Create GitLab Runner
 
+#### Add Registration Token
+
 Get a runner registration token from the GitLab Runners admin page: [https://gitlab.gitlab.example/admin/runners](https://gitlab.gitlab.example/admin/runners) by clicking the register runner button.
 
 Add the token to the `TF_VAR_gitlab_runner_registration_token` variable in your `.env`.
+
+#### Add Container Registry Credentials to .env
+
+Create an access token to your container registry
+
+Add your container registry username and token to the `.env` file in `TF_VAR_container_registry_user` and `TF_VAR_container_registry_token` respectively, these will be added to the GitLab Runner environment.
+
+Notes:
+- The runner config is configured to use DockerHub in the docker auth, if you use something else (AWS ECR) please edit the auth config `DOCKER_AUTH` in [terraform/infrastructure/templates/gitlab-runner-values.yaml.tpl](./terraform/infrastructure/templates/gitlab-runner-values.yaml.tpl).
+
+#### Deploy Runner
 
 Re-deploy the application using `./scripts/apply_infrastructure`.
 
@@ -102,30 +115,10 @@ Create the following container repositories for the sample project in DockerHub 
 
 #### Push to GitLab
 
-Ensure sure you have added your `CONTAINER_REGISTRY_USER` to the `.env` file, this will be substituted into the sample project so container images are pushed to your new repositories.
-
 Push sample project to your GitLab instance:
 
 ```sh
 ./scripts/push_sample_project
-```
-
-#### Add Docker Credentials to GitLab Project
-
-Create an access token to your container repository.
-
-Encoding your username and token in base64, e.g.
-
-```sh
-echo "username:token" | base64
-```
-
-Navigate to shared GitLab CI/CD variables: [https://gitlab.gitlab.example/admin/application_settings/ci_cd](https://gitlab.gitlab.example/admin/application_settings/ci_cd).
-
-Create a docker `config.json` and add as variable named `DOCKER_AUTH`, e.g. for DockerHub
-
-```
-DOCKER_AUTH="{ "auths": { "https://index.docker.io/v1/": { "auth": "<base64 encoded username:token" } } }"
 ```
 
 #### Run Pipeline

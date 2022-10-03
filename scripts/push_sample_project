@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -euo
+set -euo pipefail
 IFS=$'\n\t'
 
 source ./.env
@@ -7,8 +7,6 @@ source ./.env
 cd ./sample-project
 
 rm -rf ./.git
-
-find ./ -type f -print0 | xargs -0 sed -i "" "s/__CONTAINER_REGISTRY_USER__/$CONTAINER_REGISTRY_USER/g" || true
 
 git init
 git checkout -b main
