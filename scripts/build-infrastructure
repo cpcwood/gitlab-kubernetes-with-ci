@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+set -euo pipefail
+IFS=$'\n\t'
+
+./scripts/init-infrastructure
+./scripts/apply-infrastructure

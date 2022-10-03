@@ -53,7 +53,7 @@ Ignore the `TF_VAR_gitlab_runner_registration_token` variable for now, since it 
 Create the infrastructure:
 
 ```sh
-./scripts/build_infrastructure
+./scripts/build-infrastructure
 ```
 
 ### Add Public SSH Key to GitLab User
@@ -100,7 +100,7 @@ Notes:
 
 #### Deploy Runner
 
-Re-deploy the application using `./scripts/apply_infrastructure`.
+Re-deploy the application using `./scripts/apply-infrastructure`.
 
 
 ### Add Sample Project
@@ -118,13 +118,26 @@ Create the following container repositories for the sample project in DockerHub 
 Push sample project to your GitLab instance:
 
 ```sh
-./scripts/push_sample_project
+./scripts/push-sample-project
 ```
 
 #### Run Pipeline
 
 Trigger a GitLab CI pipeline in the [sample repository](https://gitlab.gitlab.example/root/sample-project) on the `main` branch to test the runner configuration.
 
+
+## Teardown
+
+To destroy all infrastructure and remote state, run the teardown script:
+
+```sh
+./scripts/destroy-infrastructure
+```
+
+Other things to remove:
+- Remove or disable any authentication tokens you created for the container registry.
+- Remove `gitlab.gitlab.example` entries from `/etc/hosts`
+- 
 
 ## Notes
 
