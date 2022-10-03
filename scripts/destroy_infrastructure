@@ -9,6 +9,6 @@ cd ./terraform/infrastructure
 terraform destroy
 
 cd -
-cd ./terraform/remote_state
+cd ./terraform/remote-state
 
 terraform destroy

@@ -4,7 +4,7 @@ IFS=$'\n\t'
 
 source ./.env
 
-cd ./terraform/remote_state
+cd ./terraform/remote-state
 
 terraform fmt -recursive
 terraform init
