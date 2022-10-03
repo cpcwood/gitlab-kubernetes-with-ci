@@ -29,11 +29,11 @@ aws_secret_access_key = <iam user secret key>
 
 ### Kubernetes Cluster
 
-The GitLab application in this repository is configured to deploy to a Kubernetes using [Helm](https://helm.sh/). Please ensure you have a Kubernetes cluster created with at least 2 nodes and the configuration file located on your local machine at `~/.kube/config`. 
+The GitLab application in this repository is configured to deploy to a Kubernetes using [Helm](https://helm.sh/). Please ensure you have a Kubernetes cluster created with at least 2 nodes and the cluster configuration file located on your local machine at `~/.kube/config`. 
 
-The application will deploy to the `gitlab` namespace in the default cluster.
+The application will deploy to the `default` namespace in the default cluster.
 
-The infrastructure is set up to work with a local install of [k3s](https://k3s.io/), please adjust to match your cluster if required.
+The infrastructure is set up to work with an install of [k3s](https://k3s.io/), please adjust the configuration to match your cluster if required.
 
 The GitLab helm chart variables can be found in [`terraform/infrastructure/templates/gitlab-values.yaml.tpl`](./terraform/infrastructure/templates/gitlab-values.yaml.tpl) with basic config in [`terraform/.env`](./terraform/.env).
 
@@ -58,9 +58,13 @@ Create the infrastructure:
 
 ### Add Public SSH Key to GitLab User
 
-The GitLab UI is configured to use the k3s traefik ingress located [here](./terraform/infrastructure/charts/k3s-ingress-gitlab/). The ingress will point to your domain defined in [`./terraform/.env`](./terraform/.env), the domain value is set in the [`.env`](./.env) file `TF_VAR_gitlab_domain` variable and has a default value of `gitlab.gitlab.example`.
+#### Add GitLab to Hosts
 
-If your cluster is not public, you may need to add your custom domain to your hosts file to be able to connect., e.g.
+The GitLab UI is configured to use the k3s [traefik](https://traefik.io/) ingress located in the code [here](./terraform/infrastructure/charts/k3s-ingress-gitlab/). 
+
+The ingress will point to the domain value set in the [`.env`](./.env) file `TF_VAR_gitlab_domain` variable, the default value is `gitlab.gitlab.example`.
+
+If your cluster is not public, you may need to add your custom domain to your hosts file to be able to connect, e.g.
 
 ```
 # /etc/hosts
@@ -69,7 +73,11 @@ If your cluster is not public, you may need to add your custom domain to your ho
 <cluster-ip> gitlab.gitlab.example
 ```
 
-Get auto generated GitLab root user password from secret: ```kubectl get secret gitlab-gitlab-initial-root-password -ojsonpath='{.data.password}' | base64 --decode ; echo```
+The UI will then be available at [https://gitlab.gitlab.example](https://gitlab.gitlab.example).
+
+#### Login with root User Password
+
+Get the auto generated GitLab root user password from secret: ```kubectl get secret gitlab-gitlab-initial-root-password -ojsonpath='{.data.password}' | base64 --decode ; echo```
 
 Login to the GitLab UI using the admin credentials:
 
@@ -78,7 +86,7 @@ username: root
 password: <password>
 ```
 
-Add your public SSH key to your GitHub user.
+Add your public SSH key to your GitHub user. See the [GitLab SSH guide](https://docs.gitlab.com/ee/user/ssh.html).
 
 
 ### Create GitLab Runner
@@ -91,17 +99,16 @@ Add the token to the `TF_VAR_gitlab_runner_registration_token` variable in your 
 
 #### Add Container Registry Credentials to .env
 
-Create an access token to your container registry
+Create an access token to your container registry.
 
-Add your container registry username and token to the `.env` file in `TF_VAR_container_registry_user` and `TF_VAR_container_registry_token` respectively, these will be added to the GitLab Runner environment.
+Add your container registry username and token to the `.env` file in variables `TF_VAR_container_registry_user` and `TF_VAR_container_registry_token` respectively, these will be added to the GitLab Runner environment.
 
 Notes:
-- The runner config is configured to use DockerHub in the docker auth, if you use something else (AWS ECR) please edit the auth config `DOCKER_AUTH` in [terraform/infrastructure/templates/gitlab-runner-values.yaml.tpl](./terraform/infrastructure/templates/gitlab-runner-values.yaml.tpl).
+- The runner config is configured to use DockerHub in the docker auth file, if you use something else, e.g. AWS ECR, please edit the auth config `DOCKER_AUTH` in [terraform/infrastructure/templates/gitlab-runner-values.yaml.tpl](./terraform/infrastructure/templates/gitlab-runner-values.yaml.tpl).
 
 #### Deploy Runner
 
 Re-deploy the application using `./scripts/apply-infrastructure`.
-
 
 ### Add Sample Project
 
@@ -137,7 +144,7 @@ To destroy all infrastructure and remote state, run the teardown script:
 Other things to remove:
 - Remove or disable any authentication tokens you created for the container registry.
 - Remove `gitlab.gitlab.example` entries from `/etc/hosts`
-- 
+
 
 ## Notes
 

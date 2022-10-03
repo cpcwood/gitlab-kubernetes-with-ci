@@ -8,7 +8,7 @@ data "template_file" "helm_values_gitlab_runner" {
     CLUSTER_IP                        = var.kubernetes_cluster_ip
     REGISTRATION_TOKEN                = var.gitlab_runner_registration_token
     CONTAINER_REGISTRY_USER           = var.container_registry_user
-    CONTAINER_REGISTRY_AUTH           = base64encode("${var.container_registry_user}:${var.container_registry_token}") 
+    CONTAINER_REGISTRY_AUTH           = base64encode("${var.container_registry_user}:${var.container_registry_token}")
     DISTRIBUTED_CACHE_BUCKET_NAME     = aws_s3_bucket.gitlab_runner_distributed_cache.id
     DISTRIBUTED_CACHE_BUCKET_LOCATION = aws_s3_bucket.gitlab_runner_distributed_cache.region
     DISTRIBUTED_CACHE_AWS_ACCESS_KEY  = aws_iam_access_key.gitlab_runner_distributed_cache_access.id
